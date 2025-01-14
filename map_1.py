@@ -1,13 +1,13 @@
 import random
 import time
 
-# Constants for map dimensions
+
 MAP_WIDTH = 15
 MAP_HEIGHT = 10
-NUM_ENEMIES = 3  # Number of enemies to spawn
-NUM_CHESTS = 1   # Number of chests to spawn
+NUM_ENEMIES = 3  
+NUM_CHESTS = 1   
 
-# Tile types
+
 TILE_EMPTY = ' '
 TILE_GRASS = ' '
 TILE_WATER = ' '
@@ -16,7 +16,7 @@ TILE_ENEMY = 'E'
 TILE_CHEST = 'C'
 TILE_EXIT = 'X'
 
-# Item types and their properties
+
 ITEMS = {
     'Sword': {'type': 'Weapon', 'damage': random.randint(16, 28)},
     'Bow': {'type': 'Weapon', 'damage': random.randint(9, 17)},
@@ -28,7 +28,7 @@ ITEMS = {
     'Key': {'type': 'Key', 'amount': 1}
 }
 
-# Enemy types and their damage values
+
 ENEMY_TYPES = {
     'Goblin': {'damage': random.randint(18, 27)},
     'Rebel': {'damage': random.randint(11, 31)},
@@ -37,7 +37,7 @@ ENEMY_TYPES = {
     'Troll': {'damage': random.randint(14, 32)}
 }
 
-# Map names for each level
+
 MAP_NAMES = [
     "SHQIPRIA --- \n Welcome to SHQIPRIA\n Be careful\n Here you can find SWORDS,HELMETS but also GUARDS!\n You will first face KRUJE then move onto the center TIRANA",
     "DARDANIA ---\n Welcome to DARDANIA\n Be careful\n Here you can find AXES,CHESTPLATES but also REBELS!\n You will first face the city of KACANIK then move onto the center PRISHTINA",
@@ -46,7 +46,7 @@ MAP_NAMES = [
     "CAMERIA --- \n Welcome to CAMERIA\n Be careful\n Here you can find SPEARS,SHIELDS but also THIEVES!\n You will first face LELOVA then move onto the center KONSIPOL"
 ]
 
-# Class definition for Player
+
 class Player:
     def __init__(self, player_class):
         self.player_class = player_class
@@ -81,17 +81,17 @@ class Player:
         print(f"Inventory: {self.inventory}")
 
 
-# Function to generate a random game map with enemies and chests
+s
 def generate_map():
     game_map = []
     tile_choices = [TILE_GRASS,TILE_EMPTY,TILE_EMPTY, TILE_WATER, TILE_EMPTY, TILE_WALL]
 
-    # Generate the map
+
     for y in range(MAP_HEIGHT):
         row = [random.choice(tile_choices) for _ in range(MAP_WIDTH)]
         game_map.append(row)
 
-    # Place enemies randomly
+
     placed_enemies = 0
     enemy_positions = []
     while placed_enemies < NUM_ENEMIES:
@@ -102,7 +102,7 @@ def generate_map():
             enemy_positions.append((x, y, enemy_type))
             placed_enemies += 1
 
-    # Place chests randomly
+
     placed_chests = 0
     while placed_chests < NUM_CHESTS:
         x, y = random.randint(0, MAP_WIDTH - 1), random.randint(0, MAP_HEIGHT - 1)
@@ -110,7 +110,6 @@ def generate_map():
             game_map[y][x] = TILE_CHEST
             placed_chests += 1
 
-    # Place the exit randomly
     x, y = random.randint(0, MAP_WIDTH - 1), random.randint(0, MAP_HEIGHT - 1)
     while game_map[y][x] != TILE_EMPTY:
         x, y = random.randint(0, MAP_WIDTH - 1), random.randint(0, MAP_HEIGHT - 1)
@@ -119,18 +118,19 @@ def generate_map():
     return game_map, enemy_positions
 
 
-# Function to display the map with the player's current position
+
 def display_map(game_map, player_x, player_y):
     for y in range(MAP_HEIGHT):
         for x in range(MAP_WIDTH):
             if x == player_x and y == player_y:
-                print("P", end=" ")  # Represent the player as 'P'
+                print("P", end=" ")  
             else:
                 print(game_map[y][x], end=" ")
         print()
 
 
-# Function for combat interactions
+
+
 def combat(enemy_name, enemy_damage, player):
     print(f"A wild {enemy_name} appears! It deals {enemy_damage} damage!")
     action = input("Do you want to fight or flee? (F/Fight or Q/Flee): ").upper()
@@ -149,9 +149,9 @@ def combat(enemy_name, enemy_damage, player):
     return True
 
 
-# Function for opening a chest and displaying its contents
+
 def open_chest():
-    dropped_items = random.sample(list(ITEMS.keys()), 3)  # Random 3 items
+    dropped_items = random.sample(list(ITEMS.keys()), 3) 
     print(f"You found a chest! It contains:")
     for idx, item in enumerate(dropped_items, start=1):
         item_info = ITEMS[item]
@@ -163,7 +163,7 @@ def open_chest():
     return dropped_items
 
 
-# Function to handle chest item selection
+
 def select_items_from_chest(items):
     selected_items = []
     while items:
@@ -187,7 +187,7 @@ def select_items_from_chest(items):
     
     return selected_items
 
-# Function to type out the intro storyline
+
 def type_out_storyline():
     intro_text = """In a world filled with conflict, war has ravaged the land. 
     The ancient kingdoms are torn apart, and only the bravest of souls dare to venture into the heart of battle. 
@@ -199,50 +199,27 @@ def type_out_storyline():
     """
     for char in intro_text:
         print(char, end='', flush=True)
-        time.sleep(0.05)  # Delay to simulate typing effect
-    print("\n")  # New line after the story is finished typing
+        time.sleep(0.05)  
+    print("\n") 
 
-# Main game loop
+
 def main():
-    # Class selection
-    print("Welcome to the game!")
-    print("Select your class:")
-    print("1. Warrior")
-    print("2. Archer")
-    print("3. Mage")
-    print("4. Thief")
-    class_choice = input("Enter the number of your class choice: ")
-
-    if class_choice == '1':
-        player_class = 'Warrior'
-    elif class_choice == '2':
-        player_class = 'Archer'
-    elif class_choice == '3':
-        player_class = 'Mage'
-    elif class_choice == '4':
-        player_class = 'Thief'
-    else:
-        print("Invalid choice! Defaulting to Warrior.")
-        player_class = 'Warrior'
-
-    player = Player(player_class)
-    player.display_info()  # Display player info
-
-    # Main game loop
+  
+ 
     game_over = False
     while not game_over:
-        # Generate the game map for the current level
+       
         game_map, enemy_positions = generate_map()
 
-        # Player starting position
+        
         player_x = MAP_WIDTH // 2
         player_y = MAP_HEIGHT // 2
 
-        # Loop for level play
+
         while True:
             display_map(game_map, player_x, player_y)
 
-            # Check if the player stepped on an enemy
+   
             for (ex, ey, enemy_name) in enemy_positions:
                 if ex == player_x and ey == player_y:
                     defeated = combat(enemy_name, ENEMY_TYPES[enemy_name]['damage'], player)
@@ -250,7 +227,7 @@ def main():
                         enemy_positions.remove((ex, ey, enemy_name))
                     break
 
-            # Ask for user input to move the player or view stats
+         
             move = input("Enter move (W/A/S/D to move, I for inventory, Q to quit): ").upper()
 
             if move == 'Q':
@@ -261,7 +238,6 @@ def main():
             if move == 'I':
                 player.display_info()
 
-            # Movement logic
             new_x, new_y = player_x, player_y
             if move == 'W' and player_y > 0:
                 new_y -= 1
@@ -284,7 +260,7 @@ def main():
                 player_x, player_y = new_x, new_y
             elif target_tile == TILE_EXIT:
                 print("You reached the exit! Moving to the next map.")
-                break  # Exit to next level or map
+                break  
             else:
                 player_x, player_y = new_x, new_y
 
